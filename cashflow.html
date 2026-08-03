@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Cashflow Harian</title>
 <style>
   :root{
@@ -80,7 +81,7 @@
         <option value="masuk">Uang masuk</option>
         <option value="keluar">Uang keluar</option>
       </select>
-      <button class="btn-add" onclick="addTx()">Tambah</button>
+      <button type="button" class="btn-add" onclick="addTx()">Tambah</button>
     </div>
     <div class="msg" id="statusMsg"></div>
   </div>
@@ -90,7 +91,7 @@
       <div class="tab active" data-view="harian" onclick="setView('harian')">Harian</div>
       <div class="tab" data-view="mingguan" onclick="setView('mingguan')">Mingguan</div>
       <div class="tab" data-view="bulanan" onclick="setView('bulanan')">Bulanan</div>
-      <button id="btnPdf" onclick="downloadPdf()" style="margin-left:auto;">Unduh PDF</button>
+      <button id="btnPdf" type="button" onclick="downloadPdf()" style="margin-left:auto;">Unduh PDF</button>
     </div>
     <div id="viewArea"></div>
   </div>
@@ -103,30 +104,34 @@ const fmt = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
 const todayStr = () => new Date().toISOString().slice(0,10);
 document.getElementById('fDate').value = todayStr();
 
-async function loadData(){
+function loadData(){
   try{
-    const res = await window.storage.get('cashflow-txs', false);
-    txs = res && res.value ? JSON.parse(res.value) : [];
-  }catch(e){ txs = []; }
+    const raw = localStorage.getItem('cashflow-txs');
+    txs = raw ? JSON.parse(raw) : [];
+  }catch(e){
+    console.error('loadData error', e);
+    txs = [];
+  }
   render();
 }
 
-async function saveData(){
+function saveData(){
   try{
-    await window.storage.set('cashflow-txs', JSON.stringify(txs), false);
+    localStorage.setItem('cashflow-txs', JSON.stringify(txs));
   }catch(e){
     document.getElementById('statusMsg').textContent = 'Gagal menyimpan data.';
+    console.error('saveData error', e);
   }
 }
 
 function addTx(){
-  const desc = document.getElementById('fDesc').value.trim();
+  const desc = (document.getElementById('fDesc').value || '').trim();
   const amt = parseFloat(document.getElementById('fAmt').value);
   const date = document.getElementById('fDate').value || todayStr();
   const type = document.getElementById('fType').value;
   const msg = document.getElementById('statusMsg');
   if(!desc){ msg.textContent = 'Isi keterangan transaksi dulu.'; return; }
-  if(!amt || amt <= 0){ msg.textContent = 'Isi jumlah yang valid.'; return; }
+  if(!amt || amt <= 0 || Number.isNaN(amt)){ msg.textContent = 'Isi jumlah yang valid.'; return; }
   txs.push({id: Date.now().toString(36), desc, amount: amt, date, type});
   document.getElementById('fDesc').value = '';
   document.getElementById('fAmt').value = '';
@@ -168,14 +173,7 @@ function render(){
   if(currentView === 'harian'){
     const sorted = [...txs].sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
     if(sorted.length===0){ area.innerHTML = '<p class="empty">Belum ada transaksi. Tambahkan di atas.</p>'; return; }
-    let rows = sorted.map(t => `
-      <tr>
-        <td>${t.date}</td>
-        <td>${escapeHtml(t.desc)}</td>
-        <td><span class="tag ${t.type}">${t.type==='masuk'?'Masuk':'Keluar'}</span></td>
-        <td class="amt ${t.type}">${t.type==='masuk'?'+':'-'}${fmt(t.amount)}</td>
-        <td><button class="del" onclick="delTx('${t.id}')" aria-label="Hapus">&times;</button></td>
-      </tr>`).join('');
+    let rows = sorted.map(t => `\n      <tr>\n        <td>${t.date}</td>\n        <td>${escapeHtml(t.desc)}</td>\n        <td><span class="tag ${t.type}">${t.type==='masuk'?'Masuk':'Keluar'}</span></td>\n        <td class="amt ${t.type}">${t.type==='masuk'?'+':'-'}${fmt(t.amount)}</td>\n        <td><button type="button" class="del" onclick="delTx('${t.id}')" aria-label="Hapus">&times;</button></td>\n      </tr>`).join('');
     area.innerHTML = `<table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Jumlah</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
   } else {
     const keyFn = currentView === 'mingguan' ? isoWeek : monthKey;
@@ -191,13 +189,7 @@ function render(){
       const g = groups[k];
       const net = g.masuk - g.keluar;
       const label = currentView === 'mingguan' ? 'Minggu ' + k.split('-W')[1] + ', ' + k.split('-W')[0] : formatMonth(k);
-      return `<div class="recap-item">
-        <div>
-          <div class="period">${label}</div>
-          <div class="detail">Masuk ${fmt(g.masuk)} · Keluar ${fmt(g.keluar)}</div>
-        </div>
-        <div class="net" style="color:${net>=0?'var(--inText)':'var(--outText)'}">${net>=0?'+':'-'}${fmt(Math.abs(net))}</div>
-      </div>`;
+      return `<div class="recap-item">\n        <div>\n          <div class="period">${label}</div>\n          <div class="detail">Masuk ${fmt(g.masuk)} · Keluar ${fmt(g.keluar)}</div>\n        </div>\n        <div class="net" style="color:${net>=0?'var(--inText)':'var(--outText)'}">${net>=0?'+':'-'}${fmt(Math.abs(net))}</div>\n      </div>`;
     }).join('');
   }
 }
@@ -208,12 +200,17 @@ function formatMonth(ym){
   return names[parseInt(m,10)-1] + ' ' + y;
 }
 function escapeHtml(s){
+  s = String(s || '');
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
 function downloadPdf(){
   if(txs.length === 0){
     document.getElementById('statusMsg').textContent = 'Belum ada transaksi untuk dicetak.';
+    return;
+  }
+  if(!window.jspdf || !window.jspdf.jsPDF){
+    document.getElementById('statusMsg').textContent = 'Library PDF tidak tersedia.';
     return;
   }
   const { jsPDF } = window.jspdf;
@@ -275,7 +272,7 @@ function downloadPdf(){
       if(!groups[k]) groups[k] = {masuk:0, keluar:0};
       groups[k][t.type] += t.amount;
     });
-    const keys = Object.keys(groups).sort();
+    const keys = Object.keys(groups).sort().reverse();
     doc.setFontSize(10);
     doc.setTextColor(120);
     doc.text('Periode', 14, y);
@@ -304,7 +301,7 @@ function downloadPdf(){
   doc.save(fname);
 }
 
-function truncate(s, n){ return s.length > n ? s.slice(0, n-1) + '…' : s; }
+function truncate(s, n){ s = String(s || ''); return s.length > n ? s.slice(0, n-1) + '…' : s; }
 
 loadData();
 </script>
