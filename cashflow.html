@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Cashflow Harian</title>
+<style>
+  :root{
+    --bg:#F6F4EF; --card:#FFFFFF; --ink:#2B2A27; --sub:#79766D;
+    --line:#E7E3DA; --in:#1D9E75; --inBg:#E1F5EE; --inText:#085041;
+    --out:#D85A30; --outBg:#FAECE7; --outText:#712B13;
+    --accent:#534AB7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);}
+  .wrap{max-width:720px;margin:0 auto;padding:24px 18px 60px;}
+  h1{font-size:22px;font-weight:600;margin:0 0 4px;}
+  .sub{color:var(--sub);font-size:14px;margin:0 0 20px;}
+  .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
+  .stat{background:var(--card);border:0.5px solid var(--line);border-radius:12px;padding:14px;}
+  .stat .label{font-size:12px;color:var(--sub);margin-bottom:4px;}
+  .stat .val{font-size:19px;font-weight:600;}
+  .stat.saldo .val{color:var(--accent);}
+  .stat.masuk .val{color:var(--inText);}
+  .stat.keluar .val{color:var(--outText);}
+  .card{background:var(--card);border:0.5px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;}
+  .card h2{font-size:15px;font-weight:600;margin:0 0 12px;}
+  .row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
+  input,select{border:0.5px solid var(--line);border-radius:8px;padding:9px 10px;font-size:14px;background:#FAF9F6;color:var(--ink);}
+  input:focus,select:focus{outline:none;border-color:var(--accent);}
+  .row input[type=text]{flex:2;min-width:120px;}
+  .row input[type=number]{flex:1;min-width:100px;}
+  .row select{flex:1;min-width:110px;}
+  button{border:0.5px solid var(--line);border-radius:8px;padding:9px 16px;font-size:14px;background:#FAF9F6;cursor:pointer;color:var(--ink);}
+  button:hover{background:#F1EFE8;}
+  .btn-add{background:var(--accent);color:#fff;border:none;font-weight:600;}
+  .btn-add:hover{opacity:.9;}
+  .tabs{display:flex;gap:6px;margin-bottom:14px;align-items:center;}
+  .tab{padding:7px 14px;border-radius:20px;font-size:13px;cursor:pointer;border:0.5px solid var(--line);background:var(--card);}
+  .tab.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th{text-align:left;color:var(--sub);font-weight:500;padding:6px 4px;border-bottom:1px solid var(--line);}
+  td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:middle;}
+  .tag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600;}
+  .tag.masuk{background:var(--inBg);color:var(--inText);}
+  .tag.keluar{background:var(--outBg);color:var(--outText);}
+  .amt{font-weight:600;white-space:nowrap;}
+  .amt.masuk{color:var(--inText);}
+  .amt.keluar{color:var(--outText);}
+  .del{cursor:pointer;color:var(--sub);font-size:16px;border:none;background:none;padding:2px 6px;}
+  .del:hover{color:var(--out);}
+  .empty{color:var(--sub);font-size:13.5px;text-align:center;padding:20px 0;}
+  .recap-item{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;}
+  .recap-item:last-child{border-bottom:none;}
+  .recap-item .period{font-weight:500;}
+  .recap-item .net{font-weight:600;}
+  .recap-item .detail{color:var(--sub);font-size:12px;margin-top:2px;}
+  .msg{font-size:12px;color:var(--sub);margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Cashflow harian</h1>
+  <p class="sub">Catat transaksi masuk dan keluar — rekap mingguan dan bulanan dihitung otomatis.</p>
+
+  <div class="summary">
+    <div class="stat saldo"><div class="label">Saldo saat ini</div><div class="val" id="saldoVal">Rp0</div></div>
+    <div class="stat masuk"><div class="label">Total masuk</div><div class="val" id="masukVal">Rp0</div></div>
+    <div class="stat keluar"><div class="label">Total keluar</div><div class="val" id="keluarVal">Rp0</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Tambah transaksi</h2>
+    <div class="row">
+      <input type="text" id="fDesc" placeholder="Keterangan (mis. jual barang, beli bahan)">
+      <input type="number" id="fAmt" placeholder="Jumlah (Rp)" min="0">
+    </div>
+    <div class="row">
+      <input type="date" id="fDate">
+      <select id="fType">
+        <option value="masuk">Uang masuk</option>
+        <option value="keluar">Uang keluar</option>
+      </select>
+      <button class="btn-add" onclick="addTx()">Tambah</button>
+    </div>
+    <div class="msg" id="statusMsg"></div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <div class="tab active" data-view="harian" onclick="setView('harian')">Harian</div>
+      <div class="tab" data-view="mingguan" onclick="setView('mingguan')">Mingguan</div>
+      <div class="tab" data-view="bulanan" onclick="setView('bulanan')">Bulanan</div>
+      <button id="btnPdf" onclick="downloadPdf()" style="margin-left:auto;">Unduh PDF</button>
+    </div>
+    <div id="viewArea"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+let txs = [];
+const fmt = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
+const todayStr = () => new Date().toISOString().slice(0,10);
+document.getElementById('fDate').value = todayStr();
+
+async function loadData(){
+  try{
+    const res = await window.storage.get('cashflow-txs', false);
+    txs = res && res.value ? JSON.parse(res.value) : [];
+  }catch(e){ txs = []; }
+  render();
+}
+
+async function saveData(){
+  try{
+    await window.storage.set('cashflow-txs', JSON.stringify(txs), false);
+  }catch(e){
+    document.getElementById('statusMsg').textContent = 'Gagal menyimpan data.';
+  }
+}
+
+function addTx(){
+  const desc = document.getElementById('fDesc').value.trim();
+  const amt = parseFloat(document.getElementById('fAmt').value);
+  const date = document.getElementById('fDate').value || todayStr();
+  const type = document.getElementById('fType').value;
+  const msg = document.getElementById('statusMsg');
+  if(!desc){ msg.textContent = 'Isi keterangan transaksi dulu.'; return; }
+  if(!amt || amt <= 0){ msg.textContent = 'Isi jumlah yang valid.'; return; }
+  txs.push({id: Date.now().toString(36), desc, amount: amt, date, type});
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fAmt').value = '';
+  msg.textContent = 'Transaksi ditambahkan.';
+  saveData();
+  render();
+}
+
+function delTx(id){
+  txs = txs.filter(t => t.id !== id);
+  saveData();
+  render();
+}
+
+let currentView = 'harian';
+function setView(v){
+  currentView = v;
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.view===v));
+  render();
+}
+
+function isoWeek(dateStr){
+  const d = new Date(dateStr+'T00:00:00');
+  d.setDate(d.getDate() + 4 - (d.getDay()||7));
+  const yearStart = new Date(d.getFullYear(),0,1);
+  const week = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+  return d.getFullYear() + '-W' + String(week).padStart(2,'0');
+}
+function monthKey(dateStr){ return dateStr.slice(0,7); }
+
+function render(){
+  const totalMasuk = txs.filter(t=>t.type==='masuk').reduce((s,t)=>s+t.amount,0);
+  const totalKeluar = txs.filter(t=>t.type==='keluar').reduce((s,t)=>s+t.amount,0);
+  document.getElementById('saldoVal').textContent = fmt(totalMasuk-totalKeluar);
+  document.getElementById('masukVal').textContent = fmt(totalMasuk);
+  document.getElementById('keluarVal').textContent = fmt(totalKeluar);
+
+  const area = document.getElementById('viewArea');
+  if(currentView === 'harian'){
+    const sorted = [...txs].sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+    if(sorted.length===0){ area.innerHTML = '<p class="empty">Belum ada transaksi. Tambahkan di atas.</p>'; return; }
+    let rows = sorted.map(t => `
+      <tr>
+        <td>${t.date}</td>
+        <td>${escapeHtml(t.desc)}</td>
+        <td><span class="tag ${t.type}">${t.type==='masuk'?'Masuk':'Keluar'}</span></td>
+        <td class="amt ${t.type}">${t.type==='masuk'?'+':'-'}${fmt(t.amount)}</td>
+        <td><button class="del" onclick="delTx('${t.id}')" aria-label="Hapus">&times;</button></td>
+      </tr>`).join('');
+    area.innerHTML = `<table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Jumlah</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+  } else {
+    const keyFn = currentView === 'mingguan' ? isoWeek : monthKey;
+    const groups = {};
+    txs.forEach(t=>{
+      const k = keyFn(t.date);
+      if(!groups[k]) groups[k] = {masuk:0, keluar:0};
+      groups[k][t.type] += t.amount;
+    });
+    const keys = Object.keys(groups).sort().reverse();
+    if(keys.length===0){ area.innerHTML = '<p class="empty">Belum ada data untuk direkap.</p>'; return; }
+    area.innerHTML = keys.map(k=>{
+      const g = groups[k];
+      const net = g.masuk - g.keluar;
+      const label = currentView === 'mingguan' ? 'Minggu ' + k.split('-W')[1] + ', ' + k.split('-W')[0] : formatMonth(k);
+      return `<div class="recap-item">
+        <div>
+          <div class="period">${label}</div>
+          <div class="detail">Masuk ${fmt(g.masuk)} · Keluar ${fmt(g.keluar)}</div>
+        </div>
+        <div class="net" style="color:${net>=0?'var(--inText)':'var(--outText)'}">${net>=0?'+':'-'}${fmt(Math.abs(net))}</div>
+      </div>`;
+    }).join('');
+  }
+}
+
+function formatMonth(ym){
+  const [y,m] = ym.split('-');
+  const names = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  return names[parseInt(m,10)-1] + ' ' + y;
+}
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function downloadPdf(){
+  if(txs.length === 0){
+    document.getElementById('statusMsg').textContent = 'Belum ada transaksi untuk dicetak.';
+    return;
+  }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const titles = {harian:'Laporan cashflow harian', mingguan:'Laporan cashflow mingguan', bulanan:'Laporan cashflow bulanan'};
+  const now = new Date();
+  const genDate = now.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+
+  doc.setFontSize(16);
+  doc.text(titles[currentView], 14, 18);
+  doc.setFontSize(10);
+  doc.setTextColor(120);
+  doc.text('Dibuat pada ' + genDate, 14, 25);
+  doc.setTextColor(0);
+
+  let y = 36;
+
+  const totalMasuk = txs.filter(t=>t.type==='masuk').reduce((s,t)=>s+t.amount,0);
+  const totalKeluar = txs.filter(t=>t.type==='keluar').reduce((s,t)=>s+t.amount,0);
+  doc.setFontSize(11);
+  doc.text('Total masuk: ' + fmt(totalMasuk), 14, y);
+  doc.text('Total keluar: ' + fmt(totalKeluar), 14, y+7);
+  doc.setFont(undefined, 'bold');
+  doc.text('Saldo bersih: ' + fmt(totalMasuk-totalKeluar), 14, y+14);
+  doc.setFont(undefined, 'normal');
+  y += 26;
+
+  doc.setDrawColor(220);
+  doc.line(14, y, 196, y);
+  y += 8;
+
+  if(currentView === 'harian'){
+    const sorted = [...txs].sort((a,b)=> a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
+    doc.setFontSize(10);
+    doc.setTextColor(120);
+    doc.text('Tanggal', 14, y);
+    doc.text('Keterangan', 45, y);
+    doc.text('Jenis', 130, y);
+    doc.text('Jumlah', 196, y, {align:'right'});
+    doc.setTextColor(0);
+    y += 6;
+    doc.setDrawColor(230);
+    doc.line(14, y-4, 196, y-4);
+
+    sorted.forEach(t=>{
+      if(y > 280){ doc.addPage(); y = 20; }
+      doc.text(t.date, 14, y);
+      doc.text(truncate(t.desc, 40), 45, y);
+      doc.text(t.type === 'masuk' ? 'Masuk' : 'Keluar', 130, y);
+      const sign = t.type === 'masuk' ? '+' : '-';
+      doc.text(sign + fmt(t.amount), 196, y, {align:'right'});
+      y += 7;
+    });
+  } else {
+    const keyFn = currentView === 'mingguan' ? isoWeek : monthKey;
+    const groups = {};
+    txs.forEach(t=>{
+      const k = keyFn(t.date);
+      if(!groups[k]) groups[k] = {masuk:0, keluar:0};
+      groups[k][t.type] += t.amount;
+    });
+    const keys = Object.keys(groups).sort();
+    doc.setFontSize(10);
+    doc.setTextColor(120);
+    doc.text('Periode', 14, y);
+    doc.text('Masuk', 100, y);
+    doc.text('Keluar', 140, y);
+    doc.text('Bersih', 196, y, {align:'right'});
+    doc.setTextColor(0);
+    y += 6;
+    doc.setDrawColor(230);
+    doc.line(14, y-4, 196, y-4);
+
+    keys.forEach(k=>{
+      if(y > 280){ doc.addPage(); y = 20; }
+      const g = groups[k];
+      const net = g.masuk - g.keluar;
+      const label = currentView === 'mingguan' ? 'Minggu ' + k.split('-W')[1] + ', ' + k.split('-W')[0] : formatMonth(k);
+      doc.text(label, 14, y);
+      doc.text(fmt(g.masuk), 100, y);
+      doc.text(fmt(g.keluar), 140, y);
+      doc.text((net>=0?'+':'-') + fmt(Math.abs(net)), 196, y, {align:'right'});
+      y += 7;
+    });
+  }
+
+  const fname = 'cashflow-' + currentView + '-' + todayStr() + '.pdf';
+  doc.save(fname);
+}
+
+function truncate(s, n){ return s.length > n ? s.slice(0, n-1) + '…' : s; }
+
+loadData();
+</script>
+</body>
+</html>
