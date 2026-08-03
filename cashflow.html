@@ -20,42 +20,43 @@
   .stat{background:var(--card);border:0.5px solid var(--line);border-radius:12px;padding:14px;}
   .stat .label{font-size:12px;color:var(--sub);margin-bottom:4px;}
   .stat .val{font-size:19px;font-weight:600;}
-  .stat.saldo .val{color:var(--accent);}
-  .stat.masuk .val{color:var(--inText);}
-  .stat.keluar .val{color:var(--outText);}
+  .stat.saldo .val{color:var(--accent);} 
+  .stat.masuk .val{color:var(--inText);} 
+  .stat.keluar .val{color:var(--outText);} 
   .card{background:var(--card);border:0.5px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;}
   .card h2{font-size:15px;font-weight:600;margin:0 0 12px;}
   .row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;}
-  input,select{border:0.5px solid var(--line);border-radius:8px;padding:9px 10px;font-size:14px;background:#FAF9F6;color:var(--ink);}
-  input:focus,select:focus{outline:none;border-color:var(--accent);}
-  .row input[type=text]{flex:2;min-width:120px;}
-  .row input[type=number]{flex:1;min-width:100px;}
-  .row select{flex:1;min-width:110px;}
-  button{border:0.5px solid var(--line);border-radius:8px;padding:9px 16px;font-size:14px;background:#FAF9F6;cursor:pointer;color:var(--ink);}
-  button:hover{background:#F1EFE8;}
-  .btn-add{background:var(--accent);color:#fff;border:none;font-weight:600;}
-  .btn-add:hover{opacity:.9;}
-  .tabs{display:flex;gap:6px;margin-bottom:14px;align-items:center;}
-  .tab{padding:7px 14px;border-radius:20px;font-size:13px;cursor:pointer;border:0.5px solid var(--line);background:var(--card);}
-  .tab.active{background:var(--ink);color:#fff;border-color:var(--ink);}
-  table{width:100%;border-collapse:collapse;font-size:13.5px;}
-  th{text-align:left;color:var(--sub);font-weight:500;padding:6px 4px;border-bottom:1px solid var(--line);}
-  td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:middle;}
-  .tag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600;}
-  .tag.masuk{background:var(--inBg);color:var(--inText);}
-  .tag.keluar{background:var(--outBg);color:var(--outText);}
-  .amt{font-weight:600;white-space:nowrap;}
-  .amt.masuk{color:var(--inText);}
-  .amt.keluar{color:var(--outText);}
-  .del{cursor:pointer;color:var(--sub);font-size:16px;border:none;background:none;padding:2px 6px;}
-  .del:hover{color:var(--out);}
-  .empty{color:var(--sub);font-size:13.5px;text-align:center;padding:20px 0;}
-  .recap-item{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;}
-  .recap-item:last-child{border-bottom:none;}
-  .recap-item .period{font-weight:500;}
-  .recap-item .net{font-weight:600;}
-  .recap-item .detail{color:var(--sub);font-size:12px;margin-top:2px;}
+  input,select{border:0.5px solid var(--line);border-radius:8px;padding:9px 10px;font-size:14px;background:#FAF9F6;color:var(--ink);} 
+  input:focus,select:focus{outline:none;border-color:var(--accent);} 
+  .row input[type=text]{flex:2;min-width:120px;} 
+  .row input[type=number]{flex:1;min-width:100px;} 
+  .row select{flex:1;min-width:110px;} 
+  button{border:0.5px solid var(--line);border-radius:8px;padding:9px 16px;font-size:14px;background:#FAF9F6;cursor:pointer;color:var(--ink);} 
+  button:hover{background:#F1EFE8;} 
+  .btn-add{background:var(--accent);color:#fff;border:none;font-weight:600;} 
+  .btn-add:hover{opacity:.9;} 
+  .tabs{display:flex;gap:6px;margin-bottom:14px;align-items:center;} 
+  .tab{padding:7px 14px;border-radius:20px;font-size:13px;cursor:pointer;border:0.5px solid var(--line);background:var(--card);} 
+  .tab.active{background:var(--ink);color:#fff;border-color:var(--ink);} 
+  table{width:100%;border-collapse:collapse;font-size:13.5px;} 
+  th{text-align:left;color:var(--sub);font-weight:500;padding:6px 4px;border-bottom:1px solid var(--line);} 
+  td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:middle;} 
+  .tag{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600;} 
+  .tag.masuk{background:var(--inBg);color:var(--inText);} 
+  .tag.keluar{background:var(--outBg);color:var(--outText);} 
+  .amt{font-weight:600;white-space:nowrap;} 
+  .amt.masuk{color:var(--inText);} 
+  .amt.keluar{color:var(--outText);} 
+  .del{cursor:pointer;color:var(--sub);font-size:16px;border:none;background:none;padding:2px 6px;} 
+  .del:hover{color:var(--out);} 
+  .empty{color:var(--sub);font-size:13.5px;text-align:center;padding:20px 0;} 
+  .recap-item{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;} 
+  .recap-item:last-child{border-bottom:none;} 
+  .recap-item .period{font-weight:500;} 
+  .recap-item .net{font-weight:600;} 
+  .recap-item .detail{color:var(--sub);font-size:12px;margin-top:2px;} 
   .msg{font-size:12px;color:var(--sub);margin-top:8px;}
+  @media print{ body{background:#fff;color:#000} .card, .tabs, button, input, select{display:none} .wrap{max-width:800px;padding:0} }
 </style>
 </head>
 <body>
@@ -91,13 +92,12 @@
       <div class="tab active" data-view="harian" onclick="setView('harian')">Harian</div>
       <div class="tab" data-view="mingguan" onclick="setView('mingguan')">Mingguan</div>
       <div class="tab" data-view="bulanan" onclick="setView('bulanan')">Bulanan</div>
-      <button id="btnPdf" type="button" onclick="downloadPdf()" style="margin-left:auto;">Unduh PDF</button>
+      <button id="btnPdf" type="button" onclick="downloadPdf()" style="margin-left:auto;">Unduh / Cetak</button>
     </div>
     <div id="viewArea"></div>
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 let txs = [];
 const fmt = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
@@ -155,6 +155,7 @@ function setView(v){
 
 function isoWeek(dateStr){
   const d = new Date(dateStr+'T00:00:00');
+  // ISO week calculation
   d.setDate(d.getDate() + 4 - (d.getDay()||7));
   const yearStart = new Date(d.getFullYear(),0,1);
   const week = Math.ceil((((d - yearStart) / 86400000) + 1)/7);
@@ -173,7 +174,10 @@ function render(){
   if(currentView === 'harian'){
     const sorted = [...txs].sort((a,b)=> b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
     if(sorted.length===0){ area.innerHTML = '<p class="empty">Belum ada transaksi. Tambahkan di atas.</p>'; return; }
-    let rows = sorted.map(t => `\n      <tr>\n        <td>${t.date}</td>\n        <td>${escapeHtml(t.desc)}</td>\n        <td><span class="tag ${t.type}">${t.type==='masuk'?'Masuk':'Keluar'}</span></td>\n        <td class="amt ${t.type}">${t.type==='masuk'?'+':'-'}${fmt(t.amount)}</td>\n        <td><button type="button" class="del" onclick="delTx('${t.id}')" aria-label="Hapus">&times;</button></td>\n      </tr>`).join('');
+    let rows = sorted.map(t => {
+      const amtClass = t.type === 'masuk' ? 'amt masuk' : 'amt keluar';
+      return `\n      <tr>\n        <td>${t.date}</td>\n        <td>${escapeHtml(t.desc)}</td>\n        <td><span class="tag ${t.type}">${t.type==='masuk'?'Masuk':'Keluar'}</span></td>\n        <td class="${amtClass}">${fmt(t.amount)}</td>\n        <td><button class="del" title="Hapus" onclick="delTx('${t.id}')">✕</button></td>\n      </tr>`;
+    }).join('');
     area.innerHTML = `<table><thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Jumlah</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
   } else {
     const keyFn = currentView === 'mingguan' ? isoWeek : monthKey;
@@ -189,7 +193,7 @@ function render(){
       const g = groups[k];
       const net = g.masuk - g.keluar;
       const label = currentView === 'mingguan' ? 'Minggu ' + k.split('-W')[1] + ', ' + k.split('-W')[0] : formatMonth(k);
-      return `<div class="recap-item">\n        <div>\n          <div class="period">${label}</div>\n          <div class="detail">Masuk ${fmt(g.masuk)} · Keluar ${fmt(g.keluar)}</div>\n        </div>\n        <div class="net" style="color:${net>=0?'var(--inText)':'var(--outText)'}">${net>=0?'+':'-'}${fmt(Math.abs(net))}</div>\n      </div>`;
+      return `<div class="recap-item">\n        <div>\n          <div class="period">${label}</div>\n          <div class="detail">Masuk ${fmt(g.masuk)} · Keluar ${fmt(g.keluar)}</div>\n        </div>\n        <div class="net ${net>=0? 'masuk':'keluar'}">${net>=0?'+':'-'}${fmt(Math.abs(net))}</div>\n      </div>`;
     }).join('');
   }
 }
@@ -204,66 +208,35 @@ function escapeHtml(s){
   return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 
+// Offline-friendly: open printable view and call window.print()
 function downloadPdf(){
   if(txs.length === 0){
     document.getElementById('statusMsg').textContent = 'Belum ada transaksi untuk dicetak.';
     return;
   }
-  if(!window.jspdf || !window.jspdf.jsPDF){
-    document.getElementById('statusMsg').textContent = 'Library PDF tidak tersedia.';
-    return;
-  }
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const titles = {harian:'Laporan cashflow harian', mingguan:'Laporan cashflow mingguan', bulanan:'Laporan cashflow bulanan'};
   const now = new Date();
   const genDate = now.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'});
+  const title = currentView === 'harian' ? 'Laporan cashflow harian' : (currentView === 'mingguan' ? 'Laporan cashflow mingguan' : 'Laporan cashflow bulanan');
 
-  doc.setFontSize(16);
-  doc.text(titles[currentView], 14, 18);
-  doc.setFontSize(10);
-  doc.setTextColor(120);
-  doc.text('Dibuat pada ' + genDate, 14, 25);
-  doc.setTextColor(0);
-
-  let y = 36;
+  // Build printable HTML
+  const style = document.querySelector('style').outerHTML;
+  let content = `<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title>${style}</head><body>`;
+  content += `<div style="padding:18px;max-width:800px;margin:0 auto;">`;
+  content += `<h2>${escapeHtml(title)}</h2>`;
+  content += `<div style="color:#666;margin-bottom:8px;">Dibuat pada ${escapeHtml(genDate)}</div>`;
 
   const totalMasuk = txs.filter(t=>t.type==='masuk').reduce((s,t)=>s+t.amount,0);
   const totalKeluar = txs.filter(t=>t.type==='keluar').reduce((s,t)=>s+t.amount,0);
-  doc.setFontSize(11);
-  doc.text('Total masuk: ' + fmt(totalMasuk), 14, y);
-  doc.text('Total keluar: ' + fmt(totalKeluar), 14, y+7);
-  doc.setFont(undefined, 'bold');
-  doc.text('Saldo bersih: ' + fmt(totalMasuk-totalKeluar), 14, y+14);
-  doc.setFont(undefined, 'normal');
-  y += 26;
-
-  doc.setDrawColor(220);
-  doc.line(14, y, 196, y);
-  y += 8;
+  content += `<div style="margin-bottom:12px;font-weight:600">Total masuk: ${fmt(totalMasuk)} · Total keluar: ${fmt(totalKeluar)} · Saldo: ${fmt(totalMasuk-totalKeluar)}</div>`;
 
   if(currentView === 'harian'){
     const sorted = [...txs].sort((a,b)=> a.date.localeCompare(b.date) || a.id.localeCompare(b.id));
-    doc.setFontSize(10);
-    doc.setTextColor(120);
-    doc.text('Tanggal', 14, y);
-    doc.text('Keterangan', 45, y);
-    doc.text('Jenis', 130, y);
-    doc.text('Jumlah', 196, y, {align:'right'});
-    doc.setTextColor(0);
-    y += 6;
-    doc.setDrawColor(230);
-    doc.line(14, y-4, 196, y-4);
-
+    content += `<table style="width:100%;border-collapse:collapse;font-size:12px;">`;
+    content += `<thead><tr><th style="text-align:left;border-bottom:1px solid #ddd;padding:6px">Tanggal</th><th style="text-align:left;border-bottom:1px solid #ddd;padding:6px">Keterangan</th><th style="text-align:left;border-bottom:1px solid #ddd;padding:6px">Jenis</th><th style="text-align:right;border-bottom:1px solid #ddd;padding:6px">Jumlah</th></tr></thead><tbody>`;
     sorted.forEach(t=>{
-      if(y > 280){ doc.addPage(); y = 20; }
-      doc.text(t.date, 14, y);
-      doc.text(truncate(t.desc, 40), 45, y);
-      doc.text(t.type === 'masuk' ? 'Masuk' : 'Keluar', 130, y);
-      const sign = t.type === 'masuk' ? '+' : '-';
-      doc.text(sign + fmt(t.amount), 196, y, {align:'right'});
-      y += 7;
+      content += `<tr><td style="padding:6px;border-bottom:1px solid #eee">${t.date}</td><td style="padding:6px;border-bottom:1px solid #eee">${escapeHtml(t.desc)}</td><td style="padding:6px;border-bottom:1px solid #eee">${t.type==='masuk'?'Masuk':'Keluar'}</td><td style="padding:6px;border-bottom:1px solid #eee;text-align:right">${fmt(t.amount)}</td></tr>`;
     });
+    content += '</tbody></table>';
   } else {
     const keyFn = currentView === 'mingguan' ? isoWeek : monthKey;
     const groups = {};
@@ -273,32 +246,28 @@ function downloadPdf(){
       groups[k][t.type] += t.amount;
     });
     const keys = Object.keys(groups).sort().reverse();
-    doc.setFontSize(10);
-    doc.setTextColor(120);
-    doc.text('Periode', 14, y);
-    doc.text('Masuk', 100, y);
-    doc.text('Keluar', 140, y);
-    doc.text('Bersih', 196, y, {align:'right'});
-    doc.setTextColor(0);
-    y += 6;
-    doc.setDrawColor(230);
-    doc.line(14, y-4, 196, y-4);
-
+    content += `<table style="width:100%;border-collapse:collapse;font-size:12px;">`;
+    content += `<thead><tr><th style="text-align:left;border-bottom:1px solid #ddd;padding:6px">Periode</th><th style="text-align:right;border-bottom:1px solid #ddd;padding:6px">Masuk</th><th style="text-align:right;border-bottom:1px solid #ddd;padding:6px">Keluar</th><th style="text-align:right;border-bottom:1px solid #ddd;padding:6px">Bersih</th></tr></thead><tbody>`;
     keys.forEach(k=>{
-      if(y > 280){ doc.addPage(); y = 20; }
       const g = groups[k];
       const net = g.masuk - g.keluar;
       const label = currentView === 'mingguan' ? 'Minggu ' + k.split('-W')[1] + ', ' + k.split('-W')[0] : formatMonth(k);
-      doc.text(label, 14, y);
-      doc.text(fmt(g.masuk), 100, y);
-      doc.text(fmt(g.keluar), 140, y);
-      doc.text((net>=0?'+':'-') + fmt(Math.abs(net)), 196, y, {align:'right'});
-      y += 7;
+      content += `<tr><td style="padding:6px;border-bottom:1px solid #eee">${escapeHtml(label)}</td><td style="padding:6px;border-bottom:1px solid #eee;text-align:right">${fmt(g.masuk)}</td><td style="padding:6px;border-bottom:1px solid #eee;text-align:right">${fmt(g.keluar)}</td><td style="padding:6px;border-bottom:1px solid #eee;text-align:right">${net>=0?'+':'-'}${fmt(Math.abs(net))}</td></tr>`;
     });
+    content += '</tbody></table>';
   }
 
-  const fname = 'cashflow-' + currentView + '-' + todayStr() + '.pdf';
-  doc.save(fname);
+  content += `<div style="margin-top:18px;color:#666;font-size:12px">Generated by Cashflow offline app</div>`;
+  content += '</div></body></html>';
+
+  const w = window.open('', '_blank');
+  if(!w){ document.getElementById('statusMsg').textContent = 'Popup terblokir. Izinkan popup untuk mencetak.'; return; }
+  w.document.open();
+  w.document.write(content);
+  w.document.close();
+  w.focus();
+  // delay sedikit agar stylesheet ter-render sebelum print
+  setTimeout(()=>{ w.print(); }, 250);
 }
 
 function truncate(s, n){ s = String(s || ''); return s.length > n ? s.slice(0, n-1) + '…' : s; }
